@@ -1,34 +1,39 @@
-# 🌀 Django Project with Docker Setup
+## 🌀 Django Project with Docker Setup
 
 This is a Django-based web application fully containerized using Docker. It includes a working Docker setup, SQLite database, and is easy to deploy on local or production environments.
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-## 🧱 Project Structure
- -------------------------------------
-# 📁 Project Structure
 
+---
+
+## 🧱 Project Structure
+
+```
 project-root/
 |
 ├── Dockerfile  
 ├── docker-compose.yml  
 ├── requirements.txt  
-├── manage.py  
-├── db.sqlite3  
 |
-├── veterinary/  
-│   ├── settings.py  
-│   ├── urls.py  
-│   ├── wsgi.py  
-│   └── ...
+├── my_portfoliowebsite/  
+│   ├── manage.py  
+│   ├── db.sqlite3  
+│   ├── my_portfoliowebsite/  
+│   │   ├── settings.py  
+│   │   ├── urls.py  
+│   │   └── wsgi.py
+│   └── my_website/
+│       ├── models.py
+│       ├── urls.py
+│       ├── views.py
+│       ├── templates/
+│       └── static/
 |
 ├── media/  
-│   ├── about/  
-│   ├── gallery/  
-│   
+│   ├── hero_images/  
+│   ├── photos/  
+│   └── product_images/
 |
-├── templates/        # HTML Templates  
-├── static/           # Static files  
 └── README.md
-
+```
 
 ---
 
@@ -42,17 +47,22 @@ FROM python:3.11-slim
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-WORKDIR /portfolio
+WORKDIR /app
 
-COPY requirements.txt /portfolio/
-RUN pip install -r requirements.txt
+COPY requirements.txt /app/
+RUN pip install --no-cache-dir -r /app/requirements.txt
 
-COPY veterinary /portfolio
+COPY my_portfoliowebsite /app/my_portfoliowebsite
+
+WORKDIR /app/my_portfoliowebsite
 
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
------------------------------------------------------------
-docker-compos.yml/
+```
 
+### docker-compose.yml
+
+```yaml
+version: '3.9'
 services:
   web:
     build: .
@@ -60,14 +70,21 @@ services:
       - "8000:8000"
     volumes:
       - .:/app
+    working_dir: /app/my_portfoliowebsite
     command: python manage.py runserver 0.0.0.0:8000
-version: '3.9'
---------------------------------------------------------
-requirements.txt/
-Django>=4.2
--------------------------------------------------------
-🚀 Run with Docker
+```
 
+### requirements.txt
+
+```text
+Django>=4.2
+```
+
+---
+
+## 🚀 Run with Docker
+
+```bash
 # Build the image
 docker-compose build
 
@@ -75,27 +92,51 @@ docker-compose build
 docker-compose up
 
 # Visit in browser
-http://localhost:8000
--------------------------------------------------------
-💻 Run Without Docker (Local Setup)
+# http://localhost:8000
+```
 
+---
+
+## 💻 Run Without Docker (Local Setup)
+
+```bash
 python -m venv venv
-source venv/Scripts/activate   # Windows: venv\Scripts\activate
-pip install -r requirements.txt
-python manage.py migrate
-python manage.py runserver
--------------------------------------------------------
-📂 Static & Media Setup
+venv\Scripts\activate  # Windows
+# source venv/bin/activate  # Linux/Mac
 
+pip install -r requirements.txt
+python my_portfoliowebsite/manage.py migrate
+python my_portfoliowebsite/manage.py runserver
+```
+
+---
+
+## 📂 Static & Media Setup (Django settings)
+
+```python
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
---------------------------------------------------------
+```
+
+Ensure your `urls.py` serves media in development:
+
+```python
+from django.conf import settings
+from django.conf.urls.static import static
+
+urlpatterns = [
+    # ... your routes ...
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+```
+
+---
+
 ## 🌐 Live Demo
 
-[Visit the Live Website](https://dr-sachinpatel.onrender.com/)
+[Visit the Live Website](https://sandip-website-8jdn.onrender.com/)
 
 ---
 
@@ -110,37 +151,30 @@ Create an account on the live site to explore the authenticated sections.
 > Below are previews of key pages from the site.
 
 ### Home
-![Home](veterinary/portfolio/static/portfolio/image/Home_page.png)
+![Home](my_portfoliowebsite/my_website/static/Home%20page.png)
 
 ### About
-![About](veterinary/portfolio/static/portfolio/image/About_page.png)
+![About](my_portfoliowebsite/my_website/static/Aboutpage.png)
 
 ### Services
-![Services](veterinary/portfolio/static/portfolio/image/Services_page.png)
+![Services](my_portfoliowebsite/my_website/static/Services.png)
 
-### Gallery
-![Gallery](veterinary/portfolio/static/portfolio/image/Gallery_page.png)
+### Skills
+![Skills](my_portfoliowebsite/my_website/static/skills.png)
 
 ### Contact
-![Contact](veterinary/portfolio/static/portfolio/image/Contact_page.png)
+![Contact](my_portfoliowebsite/my_website/static/Contactpage.png)
 
 ### Login
-![Login](veterinary/portfolio/static/portfolio/image/login_page.png)
+![Login](my_portfoliowebsite/my_website/static/loginpage.png)
 
 ### Sign Up
-![Sign Up](veterinary/portfolio/static/portfolio/image/signup_page.png)
+![Sign Up](my_portfoliowebsite/my_website/static/Signup_page.png)
 
+---
 
+## 📄 License
 
-
-
-
-
-
-
-
-
-
-
+This project is released under the MIT License. You are free to use, modify, and distribute it with attribution.
 
 
