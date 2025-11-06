@@ -151,7 +151,7 @@ Create an account on the live site to explore the authenticated sections.
 > Below are previews of key pages from the site.
 
 ### Home
-![Home](my_portfoliowebsite/my_website/static/Home%20.png)
+![Home](my_portfoliowebsite/my_website/static/Home.png)
 
 ### About
 ![About](my_portfoliowebsite/my_website/static/Aboutpage.png)
