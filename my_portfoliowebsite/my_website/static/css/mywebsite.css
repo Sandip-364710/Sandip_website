@@ -1047,8 +1047,8 @@ section {
 }
 
 .social-link {
-    width: 45px;
-    height: 45px;
+    width: 60px;
+    height: 50px;
     background: var(--glass-bg);
     backdrop-filter: blur(20px);
     border: 1px solid var(--glass-border);
