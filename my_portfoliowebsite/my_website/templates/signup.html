@@ -2,344 +2,259 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Sign Up - Sandip Portfolio</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="{% static 'favicon.svg' %}" type="image/svg+xml">
-  <link rel="alternate icon" href="{% static 'favicon.svg' %}">
+<meta charset="UTF-8">
+<title>Sign Up - Sandip Portfolio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Toastify -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
-  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<link rel="icon" href="{% static 'favicon.svg' %}">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+<!-- Toastify -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
-  <!-- Three.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+html,body{
+  width:100%;
+  height:100%;
+  font-family:'Poppins',sans-serif;
+  overflow:hidden;
+  background:black;
+}
 
-  <style>
-    /* Reset */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+/* VIDEO BACKGROUND */
+.video-bg video{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  z-index:0;
+}
 
-    html, body {
-      width: 100%;
-      height: 100%;
-      font-family: 'Poppins', sans-serif;
-      overflow: hidden;
-      position: relative;
-      /* New deep space blue/teal gradient */
-      background: radial-gradient(1200px 800px at 0% 0%, rgba(37, 99, 235, 0.18), transparent 60%),
-                  radial-gradient(900px 600px at 100% 30%, rgba(16, 185, 129, 0.14), transparent 60%),
-                  linear-gradient(135deg, #0b1020 0%, #0f172a 50%, #0b132b 100%);
-    }
+/* RIPPLE CANVAS */
+#rippleCanvas{
+  position:fixed;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+}
 
-    /* Soft animated aurora glow overlay (between canvas and form) */
-    body::after {
-      content: '';
-      position: fixed;
-      inset: -20% -10% -20% -10%;
-      background: conic-gradient(from 180deg at 50% 50%, rgba(37,99,235,0.18), rgba(16,185,129,0.16), rgba(59,130,246,0.18), rgba(37,99,235,0.18));
-      filter: blur(72px);
-      opacity: 0.6;
-      animation: aurora 14s ease-in-out infinite alternate;
-      pointer-events: none;
-      z-index: 1; /* canvas is 0, form container is 2 */
-    }
+/* BRAND */
+.auth-brand{
+  position:fixed;
+  top:18px;
+  left:18px;
+  z-index:3;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:white;
+  font-weight:800;
+}
+.auth-badge{
+  width:34px;height:34px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,#6366f1,#8b5cf6);
+}
 
-    @keyframes aurora {
-      0% { transform: translateY(-6%) scale(1); opacity: 0.55; }
-      100% { transform: translateY(6%) scale(1.04); opacity: 0.75; }
-    }
+/* FORM */
+.auth-container{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  z-index:2;
+  width:420px;
+  background:rgba(255,255,255,0.96);
+  border-radius:18px;
+  padding:40px 32px;
+  text-align:center;
+  box-shadow:0 20px 50px rgba(0,0,0,.25);
+}
 
-    /* Full page canvas background */
-    #galaxy-bg {
-      position: fixed; /* fixed to viewport */
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 0;
-      display: block;
-    }
+.auth-container h2{
+  font-weight:800;
+  margin-bottom:6px;
+}
+.subtitle{
+  font-size:.95rem;
+  color:#6b7280;
+  margin-bottom:14px;
+}
 
-    /* Name overlay in center behind form */
-    .name-overlay {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 6rem;
-      color: white;
-      font-weight: 700;
-      text-shadow:
-        0 0 10px rgba(255, 255, 255, 0.8),
-        0 0 20px rgba(255, 255, 255, 0.6);
-      pointer-events: none;
-      user-select: none;
-      z-index: 1;
-      white-space: nowrap;
-      opacity: 0.15; /* subtle behind form */
-    }
+.input-group{
+  position:relative;
+  margin-top:14px;
+}
+.input-group input{
+  width:100%;
+  padding:14px 44px;
+  border-radius:12px;
+  border:1.5px solid #e5e7eb;
+  font-size:15px;
+}
+.input-icon{
+  position:absolute;
+  left:14px;
+  top:50%;
+  transform:translateY(-50%);
+}
+.toggle-password{
+  position:absolute;
+  right:12px;
+  top:50%;
+  transform:translateY(-50%);
+  background:none;
+  border:none;
+  cursor:pointer;
+}
 
-    /* Centered form container */
-    .auth-container {
-      position: relative;
-      z-index: 2; /* above canvas and name */
-      max-width: 440px;
-      margin: auto;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(255, 255, 255, 0.96);
-      border-radius: 18px;
-      padding: 42px 34px;
-      box-shadow: 0 18px 48px rgba(0,0,0,0.18);
-      text-align: center;
-      overflow-y: auto;
-      backdrop-filter: blur(8px);
-    }
-    .auth-container::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(168,85,247,0.06));
-      pointer-events: none;
-      border-radius: 18px;
-    }
-    .auth-container:hover {
-      box-shadow: 0 22px 56px rgba(0,0,0,0.22);
-      transform: translateY(calc(-50% - 2px));
-      transition: all .25s ease;
-    }
+button[type="submit"]{
+  width:100%;
+  margin-top:16px;
+  padding:14px;
+  border:none;
+  border-radius:12px;
+  background:linear-gradient(135deg,#6366f1,#8b5cf6);
+  color:white;
+  font-weight:800;
+  font-size:16px;
+  cursor:pointer;
+}
 
-    .auth-container h2 {
-      font-weight: 800;
-      color: #1f2937;
-      margin-bottom: 6px;
-      letter-spacing: .2px;
-    }
+.switch-link{
+  margin-top:18px;
+  font-size:14px;
+}
+.switch-link a{
+  color:#4a00e0;
+  font-weight:600;
+  text-decoration:none;
+}
 
-    .auth-container .subtitle {
-      font-size: 0.95rem;
-      color: #6b7280;
-      margin-bottom: 10px;
-    }
-
-    .input-group {
-      position: relative;
-      margin-top: 16px;
-      text-align: left;
-    }
-    .input-group input {
-      width: 100%;
-      padding: 14px 46px 14px 46px;
-      border-radius: 12px;
-      border: 1.5px solid #e5e7eb;
-      font-size: 15.5px;
-      transition: all 0.2s ease;
-      background: #fff;
-      color: #1f2937;
-    }
-    .input-group input:focus {
-      border-color: #8b5cf6;
-      outline: none;
-      box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.12);
-    }
-    .input-icon {
-      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
-      color: #6b7280; font-size: 1rem; pointer-events: none;
-    }
-    .toggle-password {
-      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
-      background: transparent; border: none; color: #6b7280; cursor: pointer; padding: 6px; font-size: 1rem;
-    }
-
-
-    .auth-container button[type="submit"] {
-      width: 100%;
-      padding: 14px 16px;
-      background: linear-gradient(135deg, #6366f1, #8b5cf6);
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-weight: 800;
-      font-size: 17px;
-      transition: 0.2s;
-      cursor: pointer;
-      margin-top: 14px;
-    }
-
-    .auth-container button[type="submit"]:hover {
-      filter: brightness(1.05);
-    }
-
-    .switch-link {
-      margin-top: 20px;
-      font-size: 14px;
-    }
-
-    .switch-link a {
-      color: #4a00e0;
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    /* Responsive */
-    @media (max-width: 500px) {
-      .auth-container {
-        width: 92%;
-        padding: 30px 22px;
-      }
-      .name-overlay {
-        font-size: 3rem;
-      }
-    }
-    /* Auth brand (logo) */
-    .auth-brand { position: fixed; top: 18px; left: 18px; z-index: 3; display: inline-flex; align-items: center; gap: 10px; }
-    .auth-badge { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff; font-weight: 900; font-size: 1.1rem; text-shadow: 0 1px 2px rgba(0,0,0,.25); }
-    .auth-brand span { font-weight: 800; font-size: 1.05rem; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.25); }
-  </style>
+@media(max-width:500px){
+  .auth-container{ width:92%; }
+}
+</style>
 </head>
 <body>
-  <!-- Brand logo -->
-  <div class="auth-brand">
-    <div class="auth-badge">S</div>
-    <span>Sandip Patel</span>
-  </div>
 
-  <!-- Galaxy Background Canvas -->
-  <canvas id="galaxy-bg"></canvas>
+<!-- BRAND -->
+<div class="auth-brand">
+  <div class="auth-badge">S</div>
+  <span>Sandip Patel</span>
+</div>
 
-  <!-- Name Overlay -->
-  <div class="name-overlay">Sandip Patel</div>
+<!-- VIDEO -->
+<div class="video-bg">
+  <video autoplay muted loop playsinline>
+    <source src="{% static 'real-water-video.mp4' %}" type="video/mp4">
+  </video>
+</div>
 
-  <!-- Centered Signup Form -->
-  <div class="auth-container">
-    <h2>Create your account</h2>
-    <p class="subtitle">Join Sandip Patel's platform</p>
-    <form method="post">
-      {% csrf_token %}
+<!-- RIPPLE -->
+<canvas id="rippleCanvas"></canvas>
 
-      <div class="input-group">
-        <span class="input-icon">📧</span>
-        <input type="email" name="email" placeholder="Email address" autocomplete="email" required />
-      </div>
+<!-- FORM -->
+<div class="auth-container">
+  <h2>Create your account</h2>
+  <p class="subtitle">Join Sandip Patel's platform</p>
 
-      <div class="input-group">
-        <span class="input-icon">🔒</span>
-        <input id="password1" type="password" name="password1" placeholder="Password" autocomplete="new-password" required />
-        <button type="button" class="toggle-password" id="togglePwd1" aria-label="Show password">👁️</button>
-      </div>
+  <form method="post">
+    {% csrf_token %}
 
-      <div class="input-group">
-        <span class="input-icon">🔒</span>
-        <input id="password2" type="password" name="password2" placeholder="Confirm password" autocomplete="new-password" required />
-        <button type="button" class="toggle-password" id="togglePwd2" aria-label="Show password">👁️</button>
-      </div>
+    <div class="input-group">
+      <span class="input-icon">📧</span>
+      <input type="email" name="email" placeholder="Email" required>
+    </div>
 
-      <div id="pwdHint" style="text-align:left; font-size: 0.9rem; margin-top:10px; color:#ef4444; display:none;">Passwords do not match.</div>
+    <div class="input-group">
+      <span class="input-icon">🔒</span>
+      <input id="p1" type="password" name="password1" placeholder="Password" required>
+      <button type="button" class="toggle-password" onclick="toggle(p1,this)">👁️</button>
+    </div>
 
-      <button type="submit">Sign Up</button>
-      <p class="switch-link">Already have an account? <a href="{% url 'login' %}">Login</a></p>
-    </form>
-  </div>
+    <div class="input-group">
+      <span class="input-icon">🔒</span>
+      <input id="p2" type="password" name="password2" placeholder="Confirm Password" required>
+      <button type="button" class="toggle-password" onclick="toggle(p2,this)">👁️</button>
+    </div>
 
-  <!-- Toastify Messages -->
-  {% if messages %}
-  <script>
-    {% for message in messages %}
-      Toastify({
-        text: "{{ message }}",
-        duration: 4000,
-        gravity: "top",
-        position: "center",
-        backgroundColor: "linear-gradient(to right,rgb(249, 65, 255),rgb(174, 23, 219))",
-        stopOnFocus: true
-      }).showToast();
-    {% endfor %}
-  </script>
-  {% endif %}
+    <button type="submit">Sign Up</button>
+    <p class="switch-link">Already have an account?
+      <a href="{% url 'login' %}">Login</a>
+    </p>
+  </form>
+</div>
 
-  <!-- Galaxy Background Script -->
-  <script>
-    const canvas = document.getElementById("galaxy-bg");
-    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 5;
+{% if messages %}
+<script>
+{% for message in messages %}
+Toastify({
+  text:"{{ message }}",
+  duration:4000,
+  gravity:"top",
+  position:"center",
+  backgroundColor:"linear-gradient(to right,#8b5cf6,#6366f1)"
+}).showToast();
+{% endfor %}
+</script>
+{% endif %}
 
-    const geometry = new THREE.BufferGeometry();
-    const positions = [];
+<!-- PASSWORD TOGGLE -->
+<script>
+function toggle(input,btn){
+  const show=input.type==="text";
+  input.type=show?"password":"text";
+  btn.textContent=show?"👁️":"🙈";
+}
+</script>
 
-    for (let i = 0; i < 2000; i++) {
-      positions.push(
-        (Math.random() - 0.5) * 20,
-        (Math.random() - 0.5) * 20,
-        (Math.random() - 0.5) * 20
-      );
-    }
+<!-- WATER RIPPLE SCRIPT -->
+<script>
+const canvas=document.getElementById("rippleCanvas");
+const ctx=canvas.getContext("2d");
+let ripples=[];
 
-    geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-    const material = new THREE.PointsMaterial({ color: 0xffffff, size: 0.05 });
-    const stars = new THREE.Points(geometry, material);
-    scene.add(stars);
+function resize(){
+  canvas.width=innerWidth;
+  canvas.height=innerHeight;
+}
+resize(); addEventListener("resize",resize);
 
-    function resizeRenderer() {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      if (canvas.width !== width || canvas.height !== height) {
-        renderer.setSize(width, height, false);
-        camera.aspect = width / height;
-        camera.updateProjectionMatrix();
-      }
-    }
+function ripple(x,y){
+  ripples.push({x,y,r:2,a:0.35});
+}
 
-    function animate() {
-      requestAnimationFrame(animate);
-      resizeRenderer();
-      stars.rotation.y += 0.0005;
-      stars.rotation.x += 0.0003;
-      renderer.render(scene, camera);
-    }
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  for(let i=ripples.length-1;i>=0;i--){
+    let p=ripples[i];
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.strokeStyle=`rgba(255,255,255,${p.a})`;
+    ctx.lineWidth=1.2;
+    ctx.stroke();
+    p.r+=1.6;
+    p.a-=0.006;
+    if(p.a<=0) ripples.splice(i,1);
+  }
+  requestAnimationFrame(draw);
+}
+draw();
 
-    animate();
-  </script>
-
-  <script>
-    // Password visibility toggles
-    const p1 = document.getElementById('password1');
-    const p2 = document.getElementById('password2');
-    const t1 = document.getElementById('togglePwd1');
-    const t2 = document.getElementById('togglePwd2');
-    const hint = document.getElementById('pwdHint');
-
-    function toggle(btn, input) {
-      btn.addEventListener('click', () => {
-        const showing = input.getAttribute('type') === 'text';
-        input.setAttribute('type', showing ? 'password' : 'text');
-        btn.textContent = showing ? '👁️' : '🙈';
-        btn.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
-      });
-    }
-    if (t1 && p1) toggle(t1, p1);
-    if (t2 && p2) toggle(t2, p2);
-
-    // Lightweight live match hint
-    function checkMatch() {
-      if (!p1 || !p2 || !hint) return;
-      const mismatch = p1.value && p2.value && p1.value !== p2.value;
-      hint.style.display = mismatch ? 'block' : 'none';
-      hint.style.color = mismatch ? '#ef4444' : '#10b981';
-    }
-    if (p1 && p2) {
-      p1.addEventListener('input', checkMatch);
-      p2.addEventListener('input', checkMatch);
-    }
-  </script>
+addEventListener("mousemove",e=>{
+  if(Math.random()>0.93) ripple(e.clientX,e.clientY);
+});
+addEventListener("click",e=>{
+  for(let i=0;i<3;i++)
+    setTimeout(()=>ripple(e.clientX,e.clientY),i*120);
+});
+</script>
 
 </body>
 </html>
